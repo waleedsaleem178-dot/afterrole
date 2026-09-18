@@ -11,7 +11,9 @@ export const spacing = {
   lg: 16,
   xl: 20,
   xxl: 24,
+  x28: 28,
   xxxl: 32,
+  x40: 40,
   huge: 48,
   giant: 64,
 } as const;
@@ -20,7 +22,8 @@ export type SpacingKey = keyof typeof spacing;
 
 /** Max content width for tablet / large screens. iPhone-first, but capped. */
 export const layout = {
-  maxContentWidth: 720,
-  screenPaddingX: spacing.xxl,
+  maxContentWidth: 640,
+  /** Primary horizontal phone padding (reference uses 20). */
+  screenPaddingX: spacing.xl,
   tabBarHeight: 64,
 } as const;

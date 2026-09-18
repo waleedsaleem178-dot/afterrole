@@ -1,14 +1,17 @@
 /**
  * Semantic color tokens for AfterRole.
  *
+ * The palette is warm and editorial — ivory canvas, deep forest ink, muted
+ * green and soft sage accents. No electric/LinkedIn blue anywhere. Primary
+ * actions use deep forest with warm-white text; highlights use brand green.
+ *
  * Screens must never hard-code hex values — consume these via `useTheme()`.
- * The final palette will change during the visual redesign; keeping everything
- * semantic here means that redesign is a token change, not a rewrite.
  */
 
 export interface ThemeColors {
   background: string;
   surface: string;
+  surfaceSubtle: string;
   surfaceElevated: string;
   surfaceSunken: string;
 
@@ -17,12 +20,21 @@ export interface ThemeColors {
   textMuted: string;
   textInverse: string;
 
+  /** Deep forest — primary action background. */
+  forest: string;
+  forestSecondary: string;
+  /** Brand green — links, active states, bars, verification. */
   accent: string;
+  accentMedium: string;
   accentForeground: string;
+  /** Soft sage — selected chip / highlight fills. */
   accentSoft: string;
+  /** Very light sage — icon circle backgrounds. */
+  accentSubtle: string;
 
   border: string;
   borderStrong: string;
+  borderSubtle: string;
 
   success: string;
   successSoft: string;
@@ -40,69 +52,81 @@ export interface ThemeColors {
 }
 
 export const lightColors: ThemeColors = {
-  background: '#FFFFFF',
-  surface: '#F5F7F9',
+  background: '#F8F6F0',
+  surface: '#FFFFFF',
+  surfaceSubtle: '#FBFAF6',
   surfaceElevated: '#FFFFFF',
-  surfaceSunken: '#EEF1F5',
+  surfaceSunken: '#F3F0E8',
 
-  textPrimary: '#0E1621',
-  textSecondary: '#4A5567',
-  textMuted: '#8A94A6',
-  textInverse: '#FFFFFF',
+  textPrimary: '#151816',
+  textSecondary: '#666B66',
+  textMuted: '#919691',
+  textInverse: '#F8F6F0',
 
-  accent: '#2B50E2',
-  accentForeground: '#FFFFFF',
-  accentSoft: '#E9EEFF',
+  forest: '#112A21',
+  forestSecondary: '#183C2F',
+  accent: '#3D725E',
+  accentMedium: '#568770',
+  accentForeground: '#F8F6F0',
+  accentSoft: '#DCE8DF',
+  accentSubtle: '#EDF4EE',
 
-  border: '#E6E9EE',
-  borderStrong: '#D2D7E0',
+  border: '#E4E1D9',
+  borderStrong: '#D6D1C5',
+  borderSubtle: '#ECE9E2',
 
-  success: '#128A5B',
-  successSoft: '#E1F3EA',
-  danger: '#D64545',
-  dangerSoft: '#FBE9E9',
-  warning: '#B7791F',
-  warningSoft: '#FBEFD8',
+  success: '#3F865F',
+  successSoft: '#E9F4EC',
+  danger: '#C45E55',
+  dangerSoft: '#FBEDEA',
+  warning: '#B98B42',
+  warningSoft: '#F6ECD9',
 
-  verified: '#2B50E2',
-  overlay: 'rgba(15, 22, 33, 0.45)',
+  verified: '#3D725E',
+  overlay: 'rgba(17, 24, 20, 0.45)',
 
   tabBar: '#FFFFFF',
-  tabBarBorder: '#E6E9EE',
-  skeleton: '#E9ECF1',
+  tabBarBorder: '#E4E1D9',
+  skeleton: '#ECE9E2',
 };
 
 export const darkColors: ThemeColors = {
-  background: '#0B0F17',
-  surface: '#141A24',
-  surfaceElevated: '#1B222E',
-  surfaceSunken: '#0E131C',
+  background: '#0C110F',
+  surface: '#151C18',
+  surfaceSubtle: '#131A16',
+  surfaceElevated: '#1A221D',
+  surfaceSunken: '#101713',
 
-  textPrimary: '#F1F4F9',
-  textSecondary: '#A7B0BF',
-  textMuted: '#6C7688',
-  textInverse: '#0B0F17',
+  textPrimary: '#F4F3ED',
+  textSecondary: '#AEB4AF',
+  textMuted: '#7E8781',
+  textInverse: '#0C110F',
 
-  accent: '#4E6EF2',
-  accentForeground: '#FFFFFF',
-  accentSoft: '#1D2740',
+  forest: '#1E4536',
+  forestSecondary: '#23543F',
+  accent: '#82AE98',
+  accentMedium: '#6E9F87',
+  accentForeground: '#F4F3ED',
+  accentSoft: '#23352B',
+  accentSubtle: '#1A2620',
 
-  border: '#232C3B',
-  borderStrong: '#313C4E',
+  border: '#28332D',
+  borderStrong: '#38443C',
+  borderSubtle: '#202923',
 
-  success: '#3ECF8E',
-  successSoft: '#16281F',
-  danger: '#F26D6D',
-  dangerSoft: '#2A1618',
-  warning: '#E0A44A',
-  warningSoft: '#2A2113',
+  success: '#72AD88',
+  successSoft: '#1B2C22',
+  danger: '#DF8178',
+  dangerSoft: '#2E1E1B',
+  warning: '#C79A4E',
+  warningSoft: '#2A2314',
 
-  verified: '#6C8BFF',
+  verified: '#82AE98',
   overlay: 'rgba(0, 0, 0, 0.55)',
 
-  tabBar: '#0E131C',
-  tabBarBorder: '#232C3B',
-  skeleton: '#1E2632',
+  tabBar: '#101713',
+  tabBarBorder: '#28332D',
+  skeleton: '#202923',
 };
 
 export const colors = {

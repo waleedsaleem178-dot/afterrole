@@ -73,7 +73,7 @@ export function TextArea({
 const styles = StyleSheet.create({
   container: { gap: spacing.sm },
   input: {
-    borderRadius: radius.md,
+    borderRadius: radius.input,
     borderWidth: StyleSheet.hairlineWidth,
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.md,

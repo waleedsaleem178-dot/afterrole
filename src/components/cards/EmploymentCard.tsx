@@ -24,9 +24,8 @@ export function EmploymentCard({ employment, onVerify, onPress }: EmploymentCard
   return (
     <Card padded onPress={onPress}>
       <View style={styles.row}>
-        <View
-          style={[styles.logo, { backgroundColor: colors.surfaceSunken, borderColor: colors.border }]}>
-          <Text style={{ color: colors.textSecondary, fontFamily: fontFamily.bold, fontSize: 18 }}>
+        <View style={[styles.logo, { backgroundColor: colors.accentSubtle }]}>
+          <Text style={{ color: colors.accent, fontFamily: fontFamily.bold, fontSize: 18 }}>
             {employment.companyName.charAt(0)}
           </Text>
         </View>
@@ -66,7 +65,6 @@ const styles = StyleSheet.create({
     borderRadius: radius.md,
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: StyleSheet.hairlineWidth,
   },
   info: { flex: 1, gap: 2 },
   badgeRow: { marginTop: spacing.xs, flexDirection: 'row', alignItems: 'center' },

@@ -37,8 +37,8 @@ export function Card({ children, onPress, padded = true, elevated = false, style
 
 const styles = StyleSheet.create({
   card: {
-    borderRadius: radius.lg,
+    borderRadius: radius.card,
     borderWidth: StyleSheet.hairlineWidth,
   },
-  pressed: { opacity: 0.92, transform: [{ scale: 0.995 }] },
+  pressed: { opacity: 0.94, transform: [{ scale: 0.994 }] },
 });

@@ -62,8 +62,8 @@ export function Input({ label, hint, containerStyle, style, ...rest }: InputProp
 const styles = StyleSheet.create({
   container: { gap: spacing.sm },
   input: {
-    minHeight: 50,
-    borderRadius: radius.md,
+    minHeight: 52,
+    borderRadius: radius.input,
     borderWidth: StyleSheet.hairlineWidth,
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.md,

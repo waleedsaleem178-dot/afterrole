@@ -1,4 +1,5 @@
 import { useRouter } from 'expo-router';
+import { MoreHorizontal } from 'lucide-react-native';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { spacing } from '@/constants/spacing';
@@ -9,10 +10,10 @@ import type { Story } from '@/types';
 
 import { ReactionBar } from '../ReactionBar';
 import { Avatar } from '../ui/Avatar';
+import { VerifiedBadge } from '../ui/Badge';
 import { Card } from '../ui/Card';
 import { Chip } from '../ui/Chip';
 import { Text } from '../ui/Text';
-import { VerifiedBadge } from '../ui/Badge';
 
 export interface StoryCardProps {
   story: Story;
@@ -29,14 +30,16 @@ export function StoryCard({ story, onPress, showReactions = true }: StoryCardPro
   const goToStory = () => router.push({ pathname: '/story/[id]', params: { id: story.id } });
   const goToAuthor = () =>
     author && router.push({ pathname: '/user/[id]', params: { id: author.id } });
+  const openMenu = () =>
+    router.push({ pathname: '/report/[storyId]', params: { storyId: story.id } });
 
   return (
     <Card padded onPress={onPress ?? goToStory}>
       <View style={styles.header}>
         <Pressable onPress={goToAuthor} hitSlop={4}>
-          <Avatar name={author?.name ?? '?'} color={author?.avatarColor} size={44} />
+          <Avatar name={author?.name ?? '?'} color={author?.avatarColor} size={42} />
         </Pressable>
-        <View style={styles.headerText}>
+        <Pressable style={styles.headerText} onPress={goToAuthor} hitSlop={2}>
           <View style={styles.nameRow}>
             <Text variant="callout" numberOfLines={1}>
               {author?.name ?? 'Unknown'}
@@ -50,7 +53,10 @@ export function StoryCard({ story, onPress, showReactions = true }: StoryCardPro
           <Text variant="small" color="textMuted" numberOfLines={1}>
             {story.employmentContext} · {relativeTime(story.createdAt)}
           </Text>
-        </View>
+        </Pressable>
+        <Pressable onPress={openMenu} hitSlop={8} style={styles.menu}>
+          <MoreHorizontal size={20} color={colors.textMuted} strokeWidth={2} />
+        </Pressable>
       </View>
 
       <Pressable onPress={goToStory}>
@@ -74,14 +80,8 @@ export function StoryCard({ story, onPress, showReactions = true }: StoryCardPro
       ) : null}
 
       {showReactions ? (
-        <View style={[styles.reactions, { borderTopColor: colors.border }]}>
-          <ReactionBar
-            story={story}
-            onComment={goToStory}
-            onMenu={() =>
-              router.push({ pathname: '/report/[storyId]', params: { storyId: story.id } })
-            }
-          />
+        <View style={[styles.reactions, { borderTopColor: colors.borderSubtle }]}>
+          <ReactionBar story={story} onComment={goToStory} />
         </View>
       ) : null}
     </Card>
@@ -89,10 +89,11 @@ export function StoryCard({ story, onPress, showReactions = true }: StoryCardPro
 }
 
 const styles = StyleSheet.create({
-  header: { flexDirection: 'row', gap: spacing.md, alignItems: 'center' },
+  header: { flexDirection: 'row', gap: spacing.md, alignItems: 'flex-start' },
   headerText: { flex: 1, gap: 1 },
   nameRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
-  finalStraw: { marginTop: spacing.md, fontStyle: 'italic' },
+  menu: { paddingLeft: spacing.xs, paddingTop: 2 },
+  finalStraw: { marginTop: spacing.md, fontStyle: 'italic', lineHeight: 26 },
   excerpt: { marginTop: spacing.md },
   topics: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.xs, marginTop: spacing.md },
   reactions: {

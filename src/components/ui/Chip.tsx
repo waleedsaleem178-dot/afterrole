@@ -9,19 +9,40 @@ import { haptics } from '@/lib/haptics';
 import type { IconType } from './icon';
 import { Text } from './Text';
 
+/**
+ * `sage`  — selected = soft sage fill, forest text (reasons, tabs, tags).
+ * `forest`— selected = deep forest fill, ivory text (category filters).
+ */
+export type ChipTone = 'sage' | 'forest';
+
 export interface ChipProps {
   label: string;
   selected?: boolean;
   onPress?: () => void;
   icon?: IconType;
   size?: 'sm' | 'md';
+  tone?: ChipTone;
   style?: StyleProp<ViewStyle>;
 }
 
-export function Chip({ label, selected, onPress, icon: Icon, size = 'md', style }: ChipProps) {
+export function Chip({ label, selected, onPress, icon: Icon, size = 'md', tone = 'sage', style }: ChipProps) {
   const { colors } = useTheme();
-  const height = size === 'sm' ? 28 : 36;
-  const fg = selected ? colors.accent : colors.textSecondary;
+  const height = size === 'sm' ? 30 : 36;
+
+  let bg = colors.surface;
+  let fg = colors.textSecondary;
+  let border = colors.border;
+  if (selected) {
+    if (tone === 'forest') {
+      bg = colors.forest;
+      fg = colors.accentForeground;
+      border = colors.forest;
+    } else {
+      bg = colors.accentSoft;
+      fg = colors.accent;
+      border = colors.accentSoft;
+    }
+  }
 
   const content = (
     <View
@@ -31,8 +52,8 @@ export function Chip({ label, selected, onPress, icon: Icon, size = 'md', style 
           height,
           borderRadius: radius.pill,
           paddingHorizontal: size === 'sm' ? spacing.md : spacing.lg,
-          backgroundColor: selected ? colors.accentSoft : colors.surface,
-          borderColor: selected ? colors.accent : colors.border,
+          backgroundColor: bg,
+          borderColor: border,
         },
         style,
       ]}>
@@ -41,7 +62,7 @@ export function Chip({ label, selected, onPress, icon: Icon, size = 'md', style 
         style={{
           color: fg,
           fontFamily: selected ? fontFamily.semibold : fontFamily.medium,
-          fontSize: size === 'sm' ? 12 : 13,
+          fontSize: size === 'sm' ? 12.5 : 13.5,
         }}>
         {label}
       </Text>

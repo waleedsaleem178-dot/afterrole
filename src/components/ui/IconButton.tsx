@@ -34,7 +34,7 @@ export function IconButton({
   const { colors } = useTheme();
 
   const bg =
-    variant === 'surface' ? colors.surface : variant === 'accent' ? colors.accent : 'transparent';
+    variant === 'surface' ? colors.surface : variant === 'accent' ? colors.forest : 'transparent';
   const iconColor =
     color ?? (variant === 'accent' ? colors.accentForeground : active ? colors.accent : colors.textSecondary);
 

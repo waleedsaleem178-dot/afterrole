@@ -11,7 +11,7 @@ export const mockUsers: User[] = [
     headline: 'CRM & Automation Specialist',
     location: 'Islamabad, Pakistan',
     bio: 'I build CRM, automation and AI systems that make teams work better.',
-    avatarColor: '#2B50E2',
+    avatarColor: '#3D725E',
     verified: true,
     followerCount: 1200,
     followingCount: 486,

@@ -1,23 +1,19 @@
 import { Platform, type ViewStyle } from 'react-native';
 
 /**
- * Elevation presets. iOS uses shadow*, Android uses elevation. Values are kept
- * soft/premium; the redesign phase can tune them in one place.
+ * Elevation presets. AfterRole separates surfaces mainly through background,
+ * border and spacing — shadows are barely-there and warm-toned. Never large
+ * floating Material shadows.
  */
 type Shadow = Pick<
   ViewStyle,
   'shadowColor' | 'shadowOffset' | 'shadowOpacity' | 'shadowRadius' | 'elevation'
 >;
 
-const make = (
-  offsetY: number,
-  radius: number,
-  opacity: number,
-  elevation: number,
-): Shadow =>
+const make = (offsetY: number, radius: number, opacity: number, elevation: number): Shadow =>
   Platform.select<Shadow>({
     ios: {
-      shadowColor: '#0B1220',
+      shadowColor: '#1B241C',
       shadowOffset: { width: 0, height: offsetY },
       shadowOpacity: opacity,
       shadowRadius: radius,
@@ -28,9 +24,9 @@ const make = (
 
 export const shadows = {
   none: {} as Shadow,
-  sm: make(2, 6, 0.08, 2),
-  md: make(6, 16, 0.1, 5),
-  lg: make(12, 28, 0.14, 10),
+  sm: make(1, 4, 0.04, 1),
+  md: make(4, 12, 0.06, 3),
+  lg: make(10, 22, 0.08, 6),
 } as const;
 
 export type ShadowKey = keyof typeof shadows;
