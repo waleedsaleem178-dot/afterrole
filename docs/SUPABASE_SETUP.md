@@ -7,10 +7,21 @@ deferred on purpose.
 
 ## What you get
 
-- `supabase/schema.sql` — tables, views, and Row Level Security for companies,
-  profiles, employment, stories, comments, reactions, and follows.
+- `supabase/migrations/0001_afterrole_init.sql` — full production schema: tables,
+  views, and RLS for companies, profiles, employment, stories, comments,
+  reactions, saves, follows, notifications, reports, and verification requests.
+  **Idempotent** — safe to re-run on a database that already has the earlier
+  tables (it only adds what's missing).
+- `supabase/migrations/0002_storage.sql` — storage buckets + policies
+  (`avatars`, `company-logos` public; `verification-evidence` private).
 - `supabase/seed/companies.sql` — 2,055 real companies (United States + Pakistan).
-- `src/lib/supabase.ts` — a client that activates only when env vars are set.
+- `src/lib/supabase.ts` + `src/services/*` — a typed client and the data layer.
+
+> Note: `supabase/schema.sql` was the original all-in-one and is now superseded
+> by the migrations above. The earlier run created `employment` and `reactions`
+> tables; the production schema uses `employment_history` and `story_reactions`.
+> The old empty tables are harmless — you may optionally
+> `drop table if exists public.employment, public.reactions cascade;`
 
 ## 1. Create a project
 
@@ -21,10 +32,13 @@ deferred on purpose.
 ## 2. Create the schema
 
 1. In the dashboard, open **SQL Editor → New query**.
-2. Paste the entire contents of `supabase/schema.sql` and click **Run**.
-3. You should see the tables appear under **Table Editor**.
+2. Paste `supabase/migrations/0001_afterrole_init.sql` and click **Run**.
+3. New query → paste `supabase/migrations/0002_storage.sql` and click **Run**.
+4. You should see the tables appear under **Table Editor** and the three
+   buckets under **Storage**.
 
-The script is safe to re-run — it uses `if not exists` / `create or replace`.
+Both scripts are safe to re-run — they use `if not exists` / `create or replace`
+/ `drop policy if exists`.
 
 ## 3. Load the company directory
 

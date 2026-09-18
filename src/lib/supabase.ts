@@ -1,6 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { createClient } from '@supabase/supabase-js';
+import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import { Platform } from 'react-native';
+
+import type { Database } from '@/types/database';
+
+export type AfterRoleClient = SupabaseClient<Database>;
 
 /**
  * Supabase client for AfterRole.
@@ -23,8 +27,8 @@ export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey);
 
 // On web, AsyncStorage falls back to localStorage; on native it uses RN storage.
 // `detectSessionInUrl` is web-only and safe to leave off until we add real auth.
-export const supabase = isSupabaseConfigured
-  ? createClient(supabaseUrl!, supabaseAnonKey!, {
+export const supabase: AfterRoleClient | null = isSupabaseConfigured
+  ? createClient<Database>(supabaseUrl!, supabaseAnonKey!, {
       auth: {
         storage: AsyncStorage,
         autoRefreshToken: true,
