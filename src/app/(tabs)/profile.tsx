@@ -14,17 +14,15 @@ import { IconButton } from '@/components/ui/IconButton';
 import { Screen } from '@/components/ui/Screen';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { Text } from '@/components/ui/Text';
+import { SegmentTabs } from '@/components/ui/SegmentTabs';
 import { spacing } from '@/constants/spacing';
 import { getStoriesByAuthor, mockStories } from '@/data';
-import { useTheme } from '@/hooks/use-theme';
 import { haptics } from '@/lib/haptics';
-import { Chip } from '@/components/ui/Chip';
 import { combineStories, useStore } from '@/store';
 
 type Tab = 'Stories' | 'Experience' | 'Saved';
 
 export default function OwnProfileScreen() {
-  const { colors } = useTheme();
   const router = useRouter();
   const profile = useStore((s) => s.profile);
   const createdStories = useStore((s) => s.createdStories);
@@ -96,11 +94,7 @@ export default function OwnProfileScreen() {
         </View>
       </View>
 
-      <View style={[styles.tabs, { borderBottomColor: colors.border }]}>
-        {(['Stories', 'Experience', 'Saved'] as Tab[]).map((t) => (
-          <Chip key={t} label={t} selected={tab === t} onPress={() => setTab(t)} />
-        ))}
-      </View>
+      <SegmentTabs tabs={['Stories', 'Experience', 'Saved']} value={tab} onChange={(t) => setTab(t as Tab)} />
 
       {tab === 'Stories' ? (
         myStories.length > 0 ? (
@@ -160,11 +154,5 @@ const styles = StyleSheet.create({
   bio: { marginTop: spacing.xs, maxWidth: 420 },
   headerButtons: { flexDirection: 'row', gap: spacing.md, alignSelf: 'stretch', marginTop: spacing.md },
   flex: { flex: 1 },
-  tabs: {
-    flexDirection: 'row',
-    gap: spacing.sm,
-    paddingBottom: spacing.md,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-  },
   stack: { gap: spacing.md },
 });

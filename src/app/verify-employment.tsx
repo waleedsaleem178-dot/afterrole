@@ -83,9 +83,14 @@ export default function VerifyEmploymentScreen() {
           onPress={startVerify}
         />
       }>
-      <AppHeader showBack title="Verify employment" />
+      <AppHeader showBack title="Verify your role" />
 
-      <Text variant="title">How would you like to verify?</Text>
+      <View style={styles.intro}>
+        <Text variant="title">Verify your role</Text>
+        <Text variant="bodyLarge" color="textSecondary">
+          Verified employment gives workplace stories additional context.
+        </Text>
+      </View>
 
       <View style={styles.methods}>
         {METHODS.map((m) => {
@@ -140,6 +145,7 @@ export default function VerifyEmploymentScreen() {
 
 const styles = StyleSheet.create({
   content: { gap: spacing.lg },
+  intro: { gap: spacing.sm },
   methods: { gap: spacing.md },
   method: {
     flexDirection: 'row',

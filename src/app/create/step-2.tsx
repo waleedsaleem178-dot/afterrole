@@ -73,13 +73,15 @@ export default function CreateStep2() {
           />
         </View>
       }>
-      <AppHeader showBack />
+      <AppHeader showBack title="New story" />
       <ProgressIndicator step={2} total={3} />
 
-      <Text variant="title">Why did you leave?</Text>
-      <Text variant="body" color="textSecondary">
-        Choose everything that applies.
-      </Text>
+      <View style={styles.intro}>
+        <Text variant="title">Why did you leave?</Text>
+        <Text variant="bodyLarge" color="textSecondary">
+          Select everything that influenced your decision.
+        </Text>
+      </View>
       <View style={styles.wrap}>
         {REASONS.map((r) => (
           <Chip key={r} label={r} selected={draft.topics.includes(r)} onPress={() => toggleReason(r)} />
@@ -110,6 +112,7 @@ export default function CreateStep2() {
 
 const styles = StyleSheet.create({
   content: { gap: spacing.md },
+  intro: { gap: spacing.sm },
   wrap: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginTop: spacing.xs },
   factors: { gap: spacing.xs, marginTop: spacing.lg },
   footer: { flexDirection: 'row', gap: spacing.md },

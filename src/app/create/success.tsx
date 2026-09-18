@@ -1,6 +1,7 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { CircleCheck } from 'lucide-react-native';
-import { StyleSheet, View } from 'react-native';
+import { Check } from 'lucide-react-native';
+import { useEffect, useState } from 'react';
+import { Animated, StyleSheet, View } from 'react-native';
 
 import { Button } from '@/components/ui/Button';
 import { Screen } from '@/components/ui/Screen';
@@ -8,11 +9,23 @@ import { Text } from '@/components/ui/Text';
 import { radius } from '@/constants/radius';
 import { spacing } from '@/constants/spacing';
 import { useTheme } from '@/hooks/use-theme';
+import { haptics } from '@/lib/haptics';
 
 export default function PublishSuccess() {
   const { colors } = useTheme();
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
+
+  const [scale] = useState(() => new Animated.Value(0.6));
+  const [opacity] = useState(() => new Animated.Value(0));
+
+  useEffect(() => {
+    haptics.success();
+    Animated.parallel([
+      Animated.spring(scale, { toValue: 1, friction: 6, tension: 90, useNativeDriver: true }),
+      Animated.timing(opacity, { toValue: 1, duration: 260, useNativeDriver: true }),
+    ]).start();
+  }, [scale, opacity]);
 
   const dismiss = () => {
     try {
@@ -35,9 +48,13 @@ export default function PublishSuccess() {
   return (
     <Screen edges={['top', 'bottom']}>
       <View style={styles.body}>
-        <View style={[styles.iconWrap, { backgroundColor: colors.successSoft }]}>
-          <CircleCheck size={44} color={colors.success} strokeWidth={2} />
-        </View>
+        <Animated.View
+          style={[
+            styles.iconWrap,
+            { backgroundColor: colors.forest, opacity, transform: [{ scale }] },
+          ]}>
+          <Check size={40} color={colors.accentForeground} strokeWidth={2.6} />
+        </Animated.View>
         <Text variant="title" center>
           Your story is live.
         </Text>

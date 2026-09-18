@@ -159,7 +159,7 @@ export default function SettingsScreen() {
 
 function Divider() {
   const { colors } = useTheme();
-  return <View style={{ height: StyleSheet.hairlineWidth, backgroundColor: colors.border, marginLeft: spacing.huge }} />;
+  return <View style={{ height: StyleSheet.hairlineWidth, backgroundColor: colors.borderSubtle, marginLeft: spacing.huge }} />;
 }
 
 const styles = StyleSheet.create({

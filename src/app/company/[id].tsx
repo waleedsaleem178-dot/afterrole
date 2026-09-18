@@ -1,5 +1,5 @@
 import { useLocalSearchParams } from 'expo-router';
-import { Check, TriangleAlert } from 'lucide-react-native';
+import { Check, MoreHorizontal, Share2, TriangleAlert } from 'lucide-react-native';
 import { useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
@@ -10,18 +10,21 @@ import { AppHeader } from '@/components/ui/AppHeader';
 import { Button } from '@/components/ui/Button';
 import { Chip } from '@/components/ui/Chip';
 import { EmptyState } from '@/components/ui/EmptyState';
+import { IconButton } from '@/components/ui/IconButton';
 import { Screen } from '@/components/ui/Screen';
 import { SectionHeader } from '@/components/ui/SectionHeader';
+import { SegmentTabs } from '@/components/ui/SegmentTabs';
 import { Text } from '@/components/ui/Text';
+import { TopicBar } from '@/components/ui/TopicBar';
 import { radius } from '@/constants/radius';
 import { spacing } from '@/constants/spacing';
+import { fontFamily } from '@/constants/typography';
 import { getCompanyById, getPeopleForCompany, getStoriesByCompany, mockStories } from '@/data';
 import { useTheme } from '@/hooks/use-theme';
 import { haptics } from '@/lib/haptics';
 import { combineStories, useStore } from '@/store';
 
-type Tab = 'Overview' | 'Stories' | 'People' | 'Roles';
-const TABS: Tab[] = ['Overview', 'Stories', 'People', 'Roles'];
+const TABS = ['Overview', 'Stories', 'People', 'Roles'] as const;
 const STORY_FILTERS = ['Most helpful', 'Newest', 'Current', 'Former'] as const;
 
 export default function CompanyDetailScreen() {
@@ -33,7 +36,7 @@ export default function CompanyDetailScreen() {
   const toggleFollow = useStore((s) => s.toggleFollowCompany);
   const createdStories = useStore((s) => s.createdStories);
 
-  const [tab, setTab] = useState<Tab>('Overview');
+  const [tab, setTab] = useState<string>('Overview');
   const [storyFilter, setStoryFilter] = useState<(typeof STORY_FILTERS)[number]>('Most helpful');
 
   const people = useMemo(() => (id ? getPeopleForCompany(id) : []), [id]);
@@ -65,24 +68,39 @@ export default function CompanyDetailScreen() {
 
   return (
     <Screen scroll edges={['top']} contentStyle={styles.content}>
-      <AppHeader showBack />
+      <AppHeader
+        showBack
+        rightSlot={
+          <View style={styles.headerActions}>
+            <IconButton icon={Share2} accessibilityLabel="Share" variant="surface" onPress={() => haptics.light()} />
+            <IconButton icon={MoreHorizontal} accessibilityLabel="More" variant="surface" onPress={() => haptics.light()} />
+          </View>
+        }
+      />
 
-      {/* Company header */}
-      <View style={styles.headerBlock}>
-        <CompanyLogo company={company} size={68} />
+      {/* Cover banner */}
+      <View style={[styles.banner, { backgroundColor: colors.surfaceSunken }]}>
+        <View style={[styles.bannerTint, { backgroundColor: company.logoColor }]} />
+        <Text style={[styles.bannerInitial, { color: company.logoColor }]}>{company.name.charAt(0)}</Text>
+      </View>
+
+      {/* Identity */}
+      <View style={styles.identity}>
+        <View style={[styles.logoRing, { backgroundColor: colors.background }]}>
+          <CompanyLogo company={company} size={60} />
+        </View>
         <Text variant="title" style={styles.name}>
           {company.name}
         </Text>
         <Text variant="body" color="textSecondary">
           {company.industry}
         </Text>
-        <Text variant="callout" color="textSecondary">
-          {company.storyCount.toLocaleString()} workplace stories
+        <Text variant="callout" color="accent" style={styles.count}>
+          {company.storyCount.toLocaleString()} workplace experiences
         </Text>
         <Button
           label={following ? 'Following' : 'Follow'}
           variant={following ? 'secondary' : 'primary'}
-          fullWidth={false}
           onPress={() => {
             haptics.light();
             toggleFollow(company.id);
@@ -91,60 +109,30 @@ export default function CompanyDetailScreen() {
         />
       </View>
 
-      {/* Tabs */}
-      <View style={[styles.tabs, { borderBottomColor: colors.border }]}>
-        {TABS.map((t) => (
-          <Chip key={t} label={t} selected={tab === t} onPress={() => setTab(t)} />
-        ))}
-      </View>
+      <SegmentTabs tabs={TABS} value={tab} onChange={setTab} />
 
       {tab === 'Overview' ? (
         <View style={styles.section}>
           <SectionHeader title="What people talk about most" subtitle="Frequently mentioned — not a rating." />
           <View style={styles.topics}>
-            {company.topics.map((topic) => (
-              <View key={topic.label} style={styles.topicRow}>
-                <View style={styles.topicLabel}>
-                  <Text variant="bodyMedium">{topic.label}</Text>
-                  <Text variant="small" color="textMuted">
-                    {topic.percent}%
-                  </Text>
-                </View>
-                <View style={[styles.track, { backgroundColor: colors.surfaceSunken }]}>
-                  <View
-                    style={[styles.fill, { width: `${topic.percent}%`, backgroundColor: colors.accent }]}
-                  />
-                </View>
-              </View>
+            {company.topics.map((topic, i) => (
+              <TopicBar key={topic.label} label={topic.label} percent={topic.percent} index={i} />
             ))}
           </View>
 
-          <SectionHeader title="Common positives" />
-          <View style={styles.pointList}>
-            {company.positives.map((p) => (
-              <View key={p} style={styles.point}>
-                <View style={[styles.pointIcon, { backgroundColor: colors.successSoft }]}>
-                  <Check size={14} color={colors.success} strokeWidth={2.6} />
-                </View>
-                <Text variant="body" style={styles.flex}>
-                  {p}
-                </Text>
-              </View>
-            ))}
-          </View>
-
-          <SectionHeader title="Common challenges" />
-          <View style={styles.pointList}>
-            {company.challenges.map((c) => (
-              <View key={c} style={styles.point}>
-                <View style={[styles.pointIcon, { backgroundColor: colors.warningSoft }]}>
-                  <TriangleAlert size={14} color={colors.warning} strokeWidth={2.4} />
-                </View>
-                <Text variant="body" style={styles.flex}>
-                  {c}
-                </Text>
-              </View>
-            ))}
+          <View style={styles.twoCol}>
+            <View style={styles.col}>
+              <Text variant="subtitle">Common positives</Text>
+              {company.positives.map((p) => (
+                <Point key={p} label={p} tone="success" />
+              ))}
+            </View>
+            <View style={styles.col}>
+              <Text variant="subtitle">Common challenges</Text>
+              {company.challenges.map((c) => (
+                <Point key={c} label={c} tone="warning" />
+              ))}
+            </View>
           </View>
 
           <SectionHeader title="Recent stories" actionLabel="See all" onActionPress={() => setTab('Stories')} />
@@ -221,29 +209,51 @@ export default function CompanyDetailScreen() {
   );
 }
 
+function Point({ label, tone }: { label: string; tone: 'success' | 'warning' }) {
+  const { colors } = useTheme();
+  const bg = tone === 'success' ? colors.successSoft : colors.warningSoft;
+  const fg = tone === 'success' ? colors.success : colors.warning;
+  return (
+    <View style={styles.point}>
+      <View style={[styles.pointIcon, { backgroundColor: bg }]}>
+        {tone === 'success' ? (
+          <Check size={12} color={fg} strokeWidth={2.8} />
+        ) : (
+          <TriangleAlert size={12} color={fg} strokeWidth={2.4} />
+        )}
+      </View>
+      <Text variant="body" color="textSecondary" style={styles.flex}>
+        {label}
+      </Text>
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
   content: { gap: spacing.lg },
-  headerBlock: { alignItems: 'center', gap: spacing.xs, paddingTop: spacing.sm },
-  name: { marginTop: spacing.sm },
-  followBtn: { marginTop: spacing.md },
-  tabs: {
-    flexDirection: 'row',
-    gap: spacing.sm,
-    paddingBottom: spacing.md,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    flexWrap: 'wrap',
+  headerActions: { flexDirection: 'row', gap: spacing.sm },
+  banner: {
+    height: 128,
+    borderRadius: radius.xl,
+    overflow: 'hidden',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  section: { gap: spacing.md },
+  bannerTint: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, opacity: 0.14 },
+  bannerInitial: { fontFamily: fontFamily.bold, fontSize: 96, opacity: 0.24 },
+  identity: { alignItems: 'center', gap: spacing.xs, marginTop: -42 },
+  logoRing: { padding: 4, borderRadius: radius.lg },
+  name: { marginTop: spacing.sm },
+  count: { marginTop: spacing.xxs },
+  followBtn: { marginTop: spacing.md, alignSelf: 'stretch' },
+  section: { gap: spacing.lg },
   topics: { gap: spacing.md },
-  topicRow: { gap: spacing.xs },
-  topicLabel: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  track: { height: 8, borderRadius: radius.pill, overflow: 'hidden' },
-  fill: { height: 8, borderRadius: radius.pill },
-  pointList: { gap: spacing.sm },
+  twoCol: { gap: spacing.xl },
+  col: { gap: spacing.md },
   point: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
   pointIcon: {
-    width: 26,
-    height: 26,
+    width: 24,
+    height: 24,
     borderRadius: radius.pill,
     alignItems: 'center',
     justifyContent: 'center',
@@ -255,7 +265,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: spacing.md,
     padding: spacing.lg,
-    borderRadius: radius.lg,
+    borderRadius: radius.card,
     borderWidth: StyleSheet.hairlineWidth,
   },
   flex: { flex: 1 },

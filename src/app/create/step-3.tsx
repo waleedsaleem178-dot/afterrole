@@ -1,5 +1,5 @@
 import { useRouter } from 'expo-router';
-import { Check } from 'lucide-react-native';
+import { Check, Minus, ThumbsDown, ThumbsUp } from 'lucide-react-native';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { Avatar } from '@/components/ui/Avatar';
@@ -7,7 +7,6 @@ import { AppHeader } from '@/components/ui/AppHeader';
 import { VerifiedBadge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
-import { Chip } from '@/components/ui/Chip';
 import { ProgressIndicator } from '@/components/ui/ProgressIndicator';
 import { Screen } from '@/components/ui/Screen';
 import { Text } from '@/components/ui/Text';
@@ -37,7 +36,7 @@ export default function CreateStep3() {
   const publish = () => {
     const story = publishStory();
     if (!story) return;
-    haptics.success();
+    haptics.light();
     router.replace({ pathname: '/create/success', params: { id: story.id } });
   };
 
@@ -48,7 +47,7 @@ export default function CreateStep3() {
       edges={['top', 'bottom']}
       contentStyle={styles.content}
       footer={<Button label="Publish story" size="lg" disabled={!canPublish} onPress={publish} />}>
-      <AppHeader showBack />
+      <AppHeader showBack title="New story" />
       <ProgressIndicator step={3} total={3} />
 
       <Text variant="title">Tell the story</Text>
@@ -81,14 +80,9 @@ export default function CreateStep3() {
         <Text variant="label" color="textSecondary">
           Would you work there again?
         </Text>
-        <View style={styles.row}>
+        <View style={styles.wwaRow}>
           {WWA.map((w) => (
-            <Chip
-              key={w}
-              label={w}
-              selected={draft.wouldWorkAgain === w}
-              onPress={() => setDraft({ wouldWorkAgain: w })}
-            />
+            <WwaOption key={w} value={w} selected={draft.wouldWorkAgain === w} onPress={() => setDraft({ wouldWorkAgain: w })} />
           ))}
         </View>
       </View>
@@ -142,10 +136,60 @@ export default function CreateStep3() {
   );
 }
 
+function WwaOption({
+  value,
+  selected,
+  onPress,
+}: {
+  value: WouldWorkAgain;
+  selected: boolean;
+  onPress: () => void;
+}) {
+  const { colors } = useTheme();
+  const tone =
+    value === 'Yes'
+      ? { bg: colors.successSoft, fg: colors.success, Icon: ThumbsUp }
+      : value === 'No'
+        ? { bg: colors.dangerSoft, fg: colors.danger, Icon: ThumbsDown }
+        : { bg: colors.surfaceSunken, fg: colors.textSecondary, Icon: Minus };
+
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityState={{ selected }}
+      onPress={() => {
+        haptics.selection();
+        onPress();
+      }}
+      style={({ pressed }) => [
+        styles.wwaCard,
+        {
+          backgroundColor: selected ? tone.bg : colors.surface,
+          borderColor: selected ? tone.fg : colors.border,
+          borderWidth: selected ? 1.5 : StyleSheet.hairlineWidth,
+        },
+        pressed && { opacity: 0.85 },
+      ]}>
+      <tone.Icon size={18} color={selected ? tone.fg : colors.textMuted} strokeWidth={2.2} />
+      <Text variant="callout" style={{ color: selected ? tone.fg : colors.textSecondary }}>
+        {value}
+      </Text>
+    </Pressable>
+  );
+}
+
 const styles = StyleSheet.create({
   content: { gap: spacing.lg },
   field: { gap: spacing.sm },
-  row: { flexDirection: 'row', gap: spacing.sm },
+  wwaRow: { flexDirection: 'row', gap: spacing.sm },
+  wwaCard: {
+    flex: 1,
+    height: 64,
+    borderRadius: radius.md,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: spacing.xs,
+  },
   previewRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
   nameRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
   flex: { flex: 1 },
@@ -153,7 +197,7 @@ const styles = StyleSheet.create({
   checkbox: {
     width: 24,
     height: 24,
-    borderRadius: radius.xs,
+    borderRadius: radius.sm,
     borderWidth: 2,
     alignItems: 'center',
     justifyContent: 'center',

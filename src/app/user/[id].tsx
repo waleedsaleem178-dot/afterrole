@@ -8,22 +8,20 @@ import { AppHeader } from '@/components/ui/AppHeader';
 import { Avatar } from '@/components/ui/Avatar';
 import { VerifiedBadge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
-import { Chip } from '@/components/ui/Chip';
 import { EmptyState } from '@/components/ui/EmptyState';
+import { ProfileStats } from '@/components/ProfileStats';
 import { Screen } from '@/components/ui/Screen';
+import { SegmentTabs } from '@/components/ui/SegmentTabs';
 import { Text } from '@/components/ui/Text';
 import { spacing } from '@/constants/spacing';
 import { getStoriesByAuthor, getUserById } from '@/data';
-import { useTheme } from '@/hooks/use-theme';
 import { formatCount } from '@/lib/format';
 import { haptics } from '@/lib/haptics';
-import { ProfileStats } from '@/components/ProfileStats';
 import { combineStories, useStore } from '@/store';
 
 type Tab = 'Stories' | 'Experience';
 
 export default function PublicProfileScreen() {
-  const { colors } = useTheme();
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const user = getUserById(id);
@@ -101,10 +99,7 @@ export default function PublicProfileScreen() {
         )}
       </View>
 
-      <View style={[styles.tabs, { borderBottomColor: colors.border }]}>
-        <Chip label="Stories" selected={tab === 'Stories'} onPress={() => setTab('Stories')} />
-        <Chip label="Experience" selected={tab === 'Experience'} onPress={() => setTab('Experience')} />
-      </View>
+      <SegmentTabs tabs={['Stories', 'Experience']} value={tab} onChange={(t) => setTab(t as Tab)} />
 
       {tab === 'Stories' ? (
         stories.length > 0 ? (
@@ -137,12 +132,6 @@ const styles = StyleSheet.create({
   nameRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs, marginTop: spacing.sm },
   bio: { marginTop: spacing.xs, maxWidth: 420 },
   followBtn: { marginTop: spacing.md, alignSelf: 'stretch' },
-  tabs: {
-    flexDirection: 'row',
-    gap: spacing.sm,
-    paddingBottom: spacing.md,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-  },
   stack: { gap: spacing.md },
   count: { marginTop: spacing.sm },
 });

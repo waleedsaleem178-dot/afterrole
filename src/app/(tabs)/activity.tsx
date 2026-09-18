@@ -70,10 +70,7 @@ export default function ActivityScreen() {
                 onPress={() => open(n)}
                 style={({ pressed }) => [
                   styles.row,
-                  {
-                    backgroundColor: n.isRead ? 'transparent' : colors.surface,
-                    borderColor: colors.border,
-                  },
+                  { backgroundColor: n.isRead ? 'transparent' : colors.accentSubtle },
                   pressed && styles.pressed,
                 ]}>
                 {actor ? (
@@ -105,14 +102,14 @@ export default function ActivityScreen() {
 const styles = StyleSheet.create({
   content: { gap: spacing.lg },
   header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  list: { gap: spacing.sm },
+  list: { gap: spacing.xxs },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.md,
-    padding: spacing.md,
-    borderRadius: radius.lg,
-    borderWidth: StyleSheet.hairlineWidth,
+    paddingVertical: spacing.md,
+    paddingHorizontal: spacing.md,
+    borderRadius: radius.md,
   },
   iconWrap: {
     width: 40,

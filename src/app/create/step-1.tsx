@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/Input';
 import { ProgressIndicator } from '@/components/ui/ProgressIndicator';
 import { Screen } from '@/components/ui/Screen';
 import { Text } from '@/components/ui/Text';
+import { radius } from '@/constants/radius';
 import { spacing } from '@/constants/spacing';
 import { mockCompanies } from '@/data';
 import { useTheme } from '@/hooks/use-theme';
@@ -45,10 +46,15 @@ export default function CreateStep1() {
           onPress={() => router.push('/create/step-2')}
         />
       }>
-      <AppHeader showBack />
+      <AppHeader showBack title="New story" />
       <ProgressIndicator step={1} total={3} />
 
-      <Text variant="title">Share your story</Text>
+      <View style={styles.intro}>
+        <Text variant="title">Share your story</Text>
+        <Text variant="bodyLarge" color="textSecondary">
+          Your experience could help someone make a better decision.
+        </Text>
+      </View>
 
       <View style={styles.field}>
         <Text variant="label" color="textSecondary">
@@ -124,6 +130,7 @@ export default function CreateStep1() {
 
 const styles = StyleSheet.create({
   content: { gap: spacing.lg },
+  intro: { gap: spacing.sm },
   field: { gap: spacing.sm },
   wrap: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
   dates: { flexDirection: 'row', gap: spacing.md },
@@ -135,6 +142,6 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.md,
     paddingHorizontal: spacing.lg,
     borderWidth: StyleSheet.hairlineWidth,
-    borderRadius: 12,
+    borderRadius: radius.input,
   },
 });
