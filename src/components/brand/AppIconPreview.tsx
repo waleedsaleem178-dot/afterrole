@@ -1,31 +1,19 @@
-import { StyleSheet, View } from 'react-native';
+import { Image } from 'expo-image';
 
-import { useTheme } from '@/hooks/use-theme';
-
-import { AfterRoleMark } from './AfterRoleMark';
+const ICON = require('@/assets/brand/afterrole-icon.png');
 
 export interface AppIconPreviewProps {
   size?: number;
 }
 
-/**
- * App icon preview: deep forest field, warm-ivory doorway mark, generous
- * breathing room, no text. (iOS applies its own squircle mask; we approximate
- * with a rounded square here.)
- */
+/** Preview of the real AfterRole app icon (forest field + ivory door mark). */
 export function AppIconPreview({ size = 96 }: AppIconPreviewProps) {
-  const { colors } = useTheme();
   return (
-    <View
-      style={[
-        styles.icon,
-        { width: size, height: size, borderRadius: size * 0.225, backgroundColor: colors.forest },
-      ]}>
-      <AfterRoleMark size={size * 0.56} color={colors.textInverse} />
-    </View>
+    <Image
+      source={ICON}
+      style={{ width: size, height: size, borderRadius: size * 0.225 }}
+      contentFit="cover"
+      accessibilityLabel="AfterRole app icon"
+    />
   );
 }
-
-const styles = StyleSheet.create({
-  icon: { alignItems: 'center', justifyContent: 'center' },
-});

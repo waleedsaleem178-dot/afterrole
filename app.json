@@ -4,11 +4,11 @@
     "slug": "afterrole",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/brand/afterrole-icon.png",
     "scheme": "afterrole",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "icon": "./assets/expo.icon"
+      "icon": "./assets/brand/afterrole-icon.png"
     },
     "android": {
       "adaptiveIcon": {
@@ -21,7 +21,7 @@
     },
     "web": {
       "output": "single",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/brand/afterrole-mark-forest.png"
     },
     "plugins": [
       "expo-router",
@@ -29,8 +29,8 @@
         "expo-splash-screen",
         {
           "backgroundColor": "#112A21",
-          "image": "./assets/images/splash-icon.png",
-          "imageWidth": 76
+          "image": "./assets/brand/afterrole-mark-ivory.png",
+          "imageWidth": 120
         }
       ]
     ],

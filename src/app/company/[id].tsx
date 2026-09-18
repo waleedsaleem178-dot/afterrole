@@ -1,5 +1,5 @@
 import { useLocalSearchParams } from 'expo-router';
-import { Check, MoreHorizontal, Share2, TriangleAlert } from 'lucide-react-native';
+import { Check, Flag, MoreHorizontal, Share2 } from 'lucide-react-native';
 import { useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
@@ -122,15 +122,15 @@ export default function CompanyDetailScreen() {
 
           <View style={styles.twoCol}>
             <View style={styles.col}>
-              <Text variant="subtitle">Common positives</Text>
+              <Text variant="subtitle">Common green flags</Text>
               {company.positives.map((p) => (
                 <Point key={p} label={p} tone="success" />
               ))}
             </View>
             <View style={styles.col}>
-              <Text variant="subtitle">Common challenges</Text>
+              <Text variant="subtitle">Common red flags</Text>
               {company.challenges.map((c) => (
-                <Point key={c} label={c} tone="warning" />
+                <Point key={c} label={c} tone="danger" />
               ))}
             </View>
           </View>
@@ -209,17 +209,17 @@ export default function CompanyDetailScreen() {
   );
 }
 
-function Point({ label, tone }: { label: string; tone: 'success' | 'warning' }) {
+function Point({ label, tone }: { label: string; tone: 'success' | 'danger' }) {
   const { colors } = useTheme();
-  const bg = tone === 'success' ? colors.successSoft : colors.warningSoft;
-  const fg = tone === 'success' ? colors.success : colors.warning;
+  const bg = tone === 'success' ? colors.successSoft : colors.dangerSoft;
+  const fg = tone === 'success' ? colors.success : colors.danger;
   return (
     <View style={styles.point}>
       <View style={[styles.pointIcon, { backgroundColor: bg }]}>
         {tone === 'success' ? (
           <Check size={12} color={fg} strokeWidth={2.8} />
         ) : (
-          <TriangleAlert size={12} color={fg} strokeWidth={2.4} />
+          <Flag size={12} color={fg} strokeWidth={2.6} />
         )}
       </View>
       <Text variant="body" color="textSecondary" style={styles.flex}>

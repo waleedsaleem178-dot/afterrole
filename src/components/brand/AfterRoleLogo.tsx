@@ -1,38 +1,44 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { Image } from 'expo-image';
+import { StyleSheet, View } from 'react-native';
 
-import { fontFamily } from '@/constants/typography';
+import { spacing } from '@/constants/spacing';
 import { useTheme } from '@/hooks/use-theme';
 
 import { AfterRoleMark } from './AfterRoleMark';
 
+// Real brand wordmark ("afterrole") from the brand kit. *-light-bg is dark
+// artwork for light surfaces; *-dark-bg is light artwork for dark surfaces.
+const WORDMARKS = {
+  light: require('@/assets/brand/afterrole-wordmark-light-bg.png'),
+  dark: require('@/assets/brand/afterrole-wordmark-dark-bg.png'),
+};
+const WORDMARK_RATIO = 2172 / 724; // ≈ 3.0
+
 export interface AfterRoleLogoProps {
-  /** Wordmark font size. */
+  /** Wordmark height in px. */
   size?: number;
-  /** Show the doorway mark before the wordmark. */
+  /** Show the door mark before the wordmark. */
   withMark?: boolean;
-  /** Force a single color for both words (e.g. on colored surfaces). */
-  monoColor?: string;
 }
 
-/**
- * The AfterRole wordmark: lowercase "after" in ink + "role" in brand green.
- */
-export function AfterRoleLogo({ size = 22, withMark = false, monoColor }: AfterRoleLogoProps) {
-  const { colors } = useTheme();
-  const ink = monoColor ?? colors.textPrimary;
-  const green = monoColor ?? colors.accent;
+/** The AfterRole wordmark (brand asset), optionally preceded by the door mark. */
+export function AfterRoleLogo({ size = 22, withMark = false }: AfterRoleLogoProps) {
+  const { isDark } = useTheme();
+  const source = isDark ? WORDMARKS.dark : WORDMARKS.light;
 
   return (
     <View style={styles.row}>
-      {withMark ? <AfterRoleMark size={size * 1.15} color={monoColor ?? colors.forest} /> : null}
-      <Text style={[styles.word, { fontSize: size, color: ink }]}>
-        after<Text style={{ color: green }}>role</Text>
-      </Text>
+      {withMark ? <AfterRoleMark size={size * 1.2} /> : null}
+      <Image
+        source={source}
+        style={{ height: size, width: size * WORDMARK_RATIO }}
+        contentFit="contain"
+        accessibilityLabel="afterrole"
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  row: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  word: { fontFamily: fontFamily.serif, letterSpacing: -0.3, includeFontPadding: false },
+  row: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
 });
