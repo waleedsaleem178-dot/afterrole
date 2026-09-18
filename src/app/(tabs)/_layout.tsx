@@ -22,11 +22,11 @@ function ShareTabButton() {
         }}
         style={({ pressed }) => [
           styles.shareButton,
-          { backgroundColor: colors.accent },
-          shadows.md,
+          { backgroundColor: colors.forest, borderColor: colors.tabBar },
+          shadows.sm,
           pressed && styles.pressed,
         ]}>
-        <Plus size={26} color={colors.accentForeground} strokeWidth={2.6} />
+        <Plus size={25} color={colors.accentForeground} strokeWidth={2.6} />
       </Pressable>
     </View>
   );
@@ -40,15 +40,15 @@ export default function TabsLayout() {
       initialRouteName="home"
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: colors.accent,
+        tabBarActiveTintColor: colors.forest,
         tabBarInactiveTintColor: colors.textMuted,
         tabBarStyle: {
           backgroundColor: colors.tabBar,
           borderTopColor: colors.tabBarBorder,
-          height: Platform.OS === 'ios' ? 86 : 64,
-          paddingTop: 6,
+          height: Platform.OS === 'ios' ? 88 : 66,
+          paddingTop: 8,
         },
-        tabBarLabelStyle: { fontFamily: fontFamily.medium, fontSize: 11 },
+        tabBarLabelStyle: { fontFamily: fontFamily.medium, fontSize: 11, letterSpacing: 0 },
       }}>
       <Tabs.Screen
         name="home"
@@ -96,12 +96,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   shareButton: {
-    width: 52,
-    height: 52,
+    width: 54,
+    height: 54,
     borderRadius: radius.pill,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: -8,
+    borderWidth: 4,
+    marginTop: -12,
   },
   pressed: { transform: [{ scale: 0.94 }], opacity: 0.9 },
 });

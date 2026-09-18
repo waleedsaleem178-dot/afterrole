@@ -1,13 +1,15 @@
 import { useRouter } from 'expo-router';
+import { ArrowRight } from 'lucide-react-native';
 import { StyleSheet, View } from 'react-native';
 
 import { Avatar } from '@/components/ui/Avatar';
-import { AppHeader } from '@/components/ui/AppHeader';
 import { VerifiedBadge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Screen } from '@/components/ui/Screen';
+import { StepDots } from '@/components/ui/StepDots';
 import { Text } from '@/components/ui/Text';
+import { AppHeader } from '@/components/ui/AppHeader';
 import { radius } from '@/constants/radius';
 import { spacing } from '@/constants/spacing';
 import { fontFamily } from '@/constants/typography';
@@ -28,21 +30,22 @@ export default function OnboardingIdentity() {
     <Screen
       edges={['top', 'bottom']}
       footer={
-        <>
-          <Button label="Build my profile" size="lg" onPress={() => router.push('/create-profile')} />
+        <View style={styles.footer}>
+          <StepDots total={2} index={1} />
+          <Button label="Build my profile" size="lg" iconRight={ArrowRight} onPress={() => router.push('/create-profile')} />
           <Button label="Explore first" variant="ghost" onPress={exploreFirst} />
-        </>
+        </View>
       }>
       <AppHeader showBack />
       <View style={styles.body}>
-        <Text variant="title" style={styles.title}>
-          Your career has context.
-        </Text>
-        <Text variant="bodyLarge" color="textSecondary" style={styles.subtitle}>
-          AfterRole is built around real people and real employment histories.
-        </Text>
+        <View style={styles.headingBlock}>
+          <Text variant="title">Your career has context.</Text>
+          <Text variant="bodyLarge" color="textSecondary" style={styles.support}>
+            AfterRole stories come from real people with real professional histories.
+          </Text>
+        </View>
 
-        <Card padded elevated style={styles.sample}>
+        <Card padded style={styles.sample}>
           <View style={styles.sampleHeader}>
             <Avatar name="Waleed Saleem" color={colors.accent} size={52} verified showVerified />
             <View style={styles.sampleHeaderText}>
@@ -56,14 +59,11 @@ export default function OnboardingIdentity() {
             </View>
           </View>
 
-          <View style={[styles.divider, { backgroundColor: colors.border }]} />
+          <View style={[styles.divider, { backgroundColor: colors.borderSubtle }]} />
 
           <View style={styles.employment}>
-            <View
-              style={[styles.logo, { backgroundColor: colors.surfaceSunken, borderColor: colors.border }]}>
-              <Text style={{ color: colors.textSecondary, fontFamily: fontFamily.bold, fontSize: 18 }}>
-                A
-              </Text>
+            <View style={[styles.logo, { backgroundColor: colors.accentSubtle }]}>
+              <Text style={{ color: colors.accent, fontFamily: fontFamily.bold, fontSize: 18 }}>A</Text>
             </View>
             <View style={styles.employmentText}>
               <Text variant="callout">AdVital</Text>
@@ -71,22 +71,26 @@ export default function OnboardingIdentity() {
                 Technical Specialist
               </Text>
               <Text variant="small" color="textMuted">
-                2026 – Present
+                Aug 2026 – Present
               </Text>
             </View>
-            <VerifiedBadge label="Verified Role" />
+            <VerifiedBadge label="Verified" />
           </View>
         </Card>
+
+        <Text variant="body" color="textSecondary" center style={styles.note}>
+          Your profile gives every workplace story context.
+        </Text>
       </View>
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  body: { flex: 1, justifyContent: 'center', gap: spacing.lg },
-  title: { maxWidth: 420 },
-  subtitle: { maxWidth: 420 },
-  sample: { marginTop: spacing.md, gap: spacing.lg },
+  body: { flex: 1, justifyContent: 'center', gap: spacing.xl },
+  headingBlock: { gap: spacing.md },
+  support: { maxWidth: 380 },
+  sample: { gap: spacing.lg },
   sampleHeader: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
   sampleHeaderText: { flex: 1, gap: 2 },
   nameRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
@@ -98,7 +102,8 @@ const styles = StyleSheet.create({
     borderRadius: radius.md,
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: StyleSheet.hairlineWidth,
   },
   employmentText: { flex: 1, gap: 1 },
+  note: { marginTop: spacing.xs },
+  footer: { gap: spacing.md },
 });

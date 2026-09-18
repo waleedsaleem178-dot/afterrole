@@ -1,11 +1,13 @@
 import { useRouter } from 'expo-router';
-import { Bell, Compass } from 'lucide-react-native';
-import { useMemo, useState } from 'react';
+import { Bell, Compass, SlidersHorizontal } from 'lucide-react-native';
+import { useEffect, useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
 import { CompanyCard, CompanyLogo } from '@/components/cards/CompanyCard';
 import { PersonCard } from '@/components/cards/PersonCard';
 import { StoryCard } from '@/components/cards/StoryCard';
+import { StoryCardSkeleton } from '@/components/cards/StoryCardSkeleton';
+import { AfterRoleLogo } from '@/components/brand';
 import { Avatar } from '@/components/ui/Avatar';
 import { Chip } from '@/components/ui/Chip';
 import { EmptyState } from '@/components/ui/EmptyState';
@@ -13,16 +15,16 @@ import { IconButton } from '@/components/ui/IconButton';
 import { Screen } from '@/components/ui/Screen';
 import { SearchField } from '@/components/ui/SearchField';
 import { SectionHeader } from '@/components/ui/SectionHeader';
+import { Skeleton } from '@/components/ui/Skeleton';
 import { Text } from '@/components/ui/Text';
 import { radius } from '@/constants/radius';
 import { spacing } from '@/constants/spacing';
-import { Brand } from '@/constants/theme';
-import { fontFamily } from '@/constants/typography';
 import { getCompanyById, getFinalStraws, mockCompanies, mockStories, mockUsers } from '@/data';
 import { useNotifications } from '@/hooks/use-notifications';
 import { useTheme } from '@/hooks/use-theme';
+import { formatCount } from '@/lib/format';
 import { combineStories, useStore } from '@/store';
-import type { Story } from '@/types';
+import type { Company, Story } from '@/types';
 
 const CATEGORIES = ['Trending', 'Tech', 'Healthcare', 'Finance', 'Marketing', 'Remote'] as const;
 const CATEGORY_KEYWORDS: Record<string, string | null> = {
@@ -39,12 +41,18 @@ export default function HomeScreen() {
   const router = useRouter();
   const profile = useStore((s) => s.profile);
   const createdStories = useStore((s) => s.createdStories);
+  const hydrated = useStore((s) => s.hydrated);
   const { unreadCount } = useNotifications();
 
   const [category, setCategory] = useState<string>('Trending');
+  const [minElapsed, setMinElapsed] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setMinElapsed(true), 480);
+    return () => clearTimeout(t);
+  }, []);
+  const loading = !hydrated || !minElapsed;
 
   const allStories = useMemo(() => combineStories(createdStories, mockStories), [createdStories]);
-
   const trendingCompanies = useMemo(
     () => [...mockCompanies].sort((a, b) => b.storyCount - a.storyCount).slice(0, 6),
     [],
@@ -55,9 +63,7 @@ export default function HomeScreen() {
 
   const recentStories = useMemo(() => {
     const keyword = CATEGORY_KEYWORDS[category];
-    const list = keyword
-      ? allStories.filter((s) => storyMatches(s, keyword))
-      : allStories;
+    const list = keyword ? allStories.filter((s) => storyMatches(s, keyword)) : allStories;
     return list.slice(0, 8);
   }, [allStories, category]);
 
@@ -65,15 +71,10 @@ export default function HomeScreen() {
     <Screen scroll edges={['top']} contentStyle={styles.content}>
       {/* Header */}
       <View style={styles.header}>
-        <Text style={[styles.wordmark, { color: colors.textPrimary }]}>{Brand.wordmark}</Text>
+        <AfterRoleLogo size={19} withMark />
         <View style={styles.headerRight}>
           <View>
-            <IconButton
-              icon={Bell}
-              accessibilityLabel="Activity"
-              variant="surface"
-              onPress={() => router.push('/activity')}
-            />
+            <IconButton icon={Bell} accessibilityLabel="Activity" variant="surface" onPress={() => router.push('/activity')} />
             {unreadCount > 0 ? (
               <View style={[styles.badge, { backgroundColor: colors.danger, borderColor: colors.background }]} />
             ) : null}
@@ -91,35 +92,38 @@ export default function HomeScreen() {
         </Text>
         <SearchField
           editable={false}
+          size="lg"
           placeholder="Search a company, role or industry..."
           onPress={() => router.push('/search')}
+          trailingIcon={SlidersHorizontal}
+          onTrailingPress={() => router.push('/discover')}
         />
       </View>
 
       {/* Category chips */}
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.chips}>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chips}>
         {CATEGORIES.map((c) => (
-          <Chip key={c} label={c} selected={category === c} onPress={() => setCategory(c)} />
+          <Chip key={c} label={c} tone="forest" selected={category === c} onPress={() => setCategory(c)} />
         ))}
       </ScrollView>
 
+      {loading ? (
+        <View style={styles.section}>
+          <Skeleton width={180} height={20} />
+          <View style={styles.stack}>
+            <StoryCardSkeleton />
+            <StoryCardSkeleton />
+            <StoryCardSkeleton />
+          </View>
+        </View>
+      ) : (
+        <>
       {/* Trending this week */}
       <View style={styles.section}>
-        <SectionHeader title="Trending this week" subtitle="Most-discussed workplaces right now" />
+        <SectionHeader title="Trending this week" actionLabel="See all" onActionPress={() => router.push('/discover')} />
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.trendingRow}>
           {trendingCompanies.map((c) => (
-            <Pressable
-              key={c.id}
-              onPress={() => router.push({ pathname: '/company/[id]', params: { id: c.id } })}
-              style={({ pressed }) => [styles.trendingTile, pressed && styles.pressed]}>
-              <CompanyLogo company={c} size={56} />
-              <Text variant="label" numberOfLines={1} style={styles.trendingName}>
-                {c.name}
-              </Text>
-            </Pressable>
+            <TrendingCompanyCard key={c.id} company={c} onPress={() => router.push({ pathname: '/company/[id]', params: { id: c.id } })} />
           ))}
         </ScrollView>
       </View>
@@ -173,7 +177,35 @@ export default function HomeScreen() {
           ))}
         </View>
       </View>
+        </>
+      )}
     </Screen>
+  );
+}
+
+function TrendingCompanyCard({ company, onPress }: { company: Company; onPress: () => void }) {
+  const { colors } = useTheme();
+  return (
+    <Pressable
+      onPress={onPress}
+      style={({ pressed }) => [
+        styles.trendingCard,
+        { backgroundColor: colors.surface, borderColor: colors.border },
+        pressed && styles.pressed,
+      ]}>
+      <CompanyLogo company={company} size={42} />
+      <View style={styles.trendingText}>
+        <Text variant="callout" numberOfLines={1}>
+          {company.name}
+        </Text>
+        <Text variant="small" color="textSecondary" numberOfLines={1}>
+          {company.industry}
+        </Text>
+      </View>
+      <Text variant="small" color="textMuted">
+        {formatCount(company.storyCount)} stories
+      </Text>
+    </Pressable>
   );
 }
 
@@ -186,13 +218,12 @@ function storyMatches(story: Story, keyword: string): boolean {
 
 const styles = StyleSheet.create({
   content: { gap: spacing.xxl },
-  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: spacing.sm },
-  wordmark: { fontFamily: fontFamily.bold, fontSize: 22, letterSpacing: -0.4 },
+  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: spacing.xs },
   headerRight: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
   badge: {
     position: 'absolute',
-    top: 2,
-    right: 2,
+    top: 1,
+    right: 1,
     width: 10,
     height: 10,
     borderRadius: radius.pill,
@@ -203,8 +234,14 @@ const styles = StyleSheet.create({
   chips: { gap: spacing.sm, paddingRight: spacing.lg },
   section: { gap: spacing.md },
   stack: { gap: spacing.md },
-  trendingRow: { gap: spacing.lg, paddingVertical: spacing.xs },
-  trendingTile: { alignItems: 'center', gap: spacing.sm, width: 76 },
-  trendingName: { textAlign: 'center' },
-  pressed: { opacity: 0.7 },
+  trendingRow: { gap: spacing.md, paddingVertical: spacing.xxs, paddingRight: spacing.lg },
+  trendingCard: {
+    width: 210,
+    gap: spacing.md,
+    padding: spacing.lg,
+    borderRadius: radius.card,
+    borderWidth: StyleSheet.hairlineWidth,
+  },
+  trendingText: { gap: 2 },
+  pressed: { opacity: 0.85, transform: [{ scale: 0.99 }] },
 });
