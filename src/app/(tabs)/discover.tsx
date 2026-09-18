@@ -14,7 +14,8 @@ import { SearchField } from '@/components/ui/SearchField';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { Text } from '@/components/ui/Text';
 import { spacing } from '@/constants/spacing';
-import { directoryCompanies, mockCompanies, mockStories, mockUsers } from '@/data';
+import { mockCompanies, mockStories, mockUsers } from '@/data';
+import { useCompanies } from '@/lib/company-directory';
 import { INDUSTRIES } from '@/lib/search';
 import { useStore } from '@/store';
 
@@ -61,12 +62,13 @@ export default function DiscoverScreen() {
   const peopleToFollow = useMemo(() => mockUsers.filter((u) => u.id !== profile.id).slice(0, 3), [profile.id]);
   const discussed = useMemo(() => [...mockCompanies].slice(4, 8), []);
 
+  const { companies: universe } = useCompanies();
+  const directory = useMemo(() => universe.filter((c) => c.country), [universe]);
   const [country, setCountry] = useState<CountryFilter>('All');
   const browseCompanies = useMemo(() => {
-    const list =
-      country === 'All' ? directoryCompanies : directoryCompanies.filter((c) => c.country === country);
+    const list = country === 'All' ? directory : directory.filter((c) => c.country === country);
     return list.slice(0, 8);
-  }, [country]);
+  }, [country, directory]);
 
   const resetFilters = () => {
     setIndustry(null);
@@ -107,7 +109,7 @@ export default function DiscoverScreen() {
         <View style={styles.section}>
           <SectionHeader
             title="Browse companies"
-            subtitle={`${directoryCompanies.length.toLocaleString()} real companies · US & Pakistan`}
+            subtitle={`${directory.length.toLocaleString()} real companies · US & Pakistan`}
             actionLabel="Search all"
             onActionPress={() => router.push('/search')}
           />

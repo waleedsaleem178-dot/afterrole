@@ -10,7 +10,7 @@ export type SearchResult =
 /** Cap company matches so a broad query can't render thousands of rows. */
 const MAX_COMPANY_RESULTS = 40;
 
-export function searchAll(rawQuery: string): SearchResult[] {
+export function searchAll(rawQuery: string, companyPool: Company[] = allCompanies): SearchResult[] {
   const q = rawQuery.trim().toLowerCase();
   if (!q) return [];
 
@@ -20,7 +20,7 @@ export function searchAll(rawQuery: string): SearchResult[] {
   // Prefix (name-starts-with) matches rank above substring matches.
   const prefix: SearchResult[] = [];
   const contains: SearchResult[] = [];
-  for (const company of allCompanies) {
+  for (const company of companyPool) {
     const name = company.name.toLowerCase();
     if (name.startsWith(q)) {
       prefix.push({ key: `c:${company.id}`, type: 'company', company });

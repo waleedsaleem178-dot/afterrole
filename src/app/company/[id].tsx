@@ -20,6 +20,7 @@ import { radius } from '@/constants/radius';
 import { spacing } from '@/constants/spacing';
 import { fontFamily } from '@/constants/typography';
 import { getCompanyById, getPeopleForCompany, getStoriesByCompany, mockStories } from '@/data';
+import { useCompanies } from '@/lib/company-directory';
 import { useTheme } from '@/hooks/use-theme';
 import { haptics } from '@/lib/haptics';
 import { combineStories, useStore } from '@/store';
@@ -31,7 +32,11 @@ export default function CompanyDetailScreen() {
   const { colors } = useTheme();
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
-  const company = getCompanyById(id);
+  const { companies } = useCompanies();
+  const company = useMemo(
+    () => companies.find((c) => c.id === id) ?? getCompanyById(id),
+    [companies, id],
+  );
 
   const following = useStore((s) => s.followedCompanies.includes(id ?? ''));
   const toggleFollow = useStore((s) => s.toggleFollowCompany);

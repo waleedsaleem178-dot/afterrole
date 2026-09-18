@@ -17,6 +17,7 @@ import { Text } from '@/components/ui/Text';
 import { spacing } from '@/constants/spacing';
 import { radius } from '@/constants/radius';
 import { useTheme } from '@/hooks/use-theme';
+import { useCompanies } from '@/lib/company-directory';
 import { searchAll } from '@/lib/search';
 
 const SEGMENTS = ['All', 'Companies', 'People', 'Stories', 'Roles'] as const;
@@ -27,8 +28,9 @@ export default function SearchScreen() {
   const params = useLocalSearchParams<{ q?: string }>();
   const [query, setQuery] = useState(params.q ?? '');
   const [segment, setSegment] = useState<string>('All');
+  const { companies: pool } = useCompanies();
 
-  const results = useMemo(() => searchAll(query), [query]);
+  const results = useMemo(() => searchAll(query, pool), [query, pool]);
   const companies = results.filter((r) => r.type === 'company');
   const people = results.filter((r) => r.type === 'person');
   const roles = results.filter((r) => r.type === 'role');
