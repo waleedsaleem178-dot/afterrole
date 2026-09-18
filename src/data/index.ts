@@ -2,19 +2,31 @@ import type { Comment, Company, Story, User } from '@/types';
 
 import { mockComments } from './comments';
 import { mockCompanies } from './companies';
+import { directoryCompanies } from './directory';
 import { mockNotifications } from './notifications';
 import { mockStories } from './stories';
 import { CURRENT_USER_ID, mockUsers } from './users';
 
 export { mockUsers, CURRENT_USER_ID } from './users';
 export { mockCompanies } from './companies';
+export { directoryCompanies } from './directory';
 export { mockStories } from './stories';
 export { mockComments } from './comments';
 export { mockNotifications } from './notifications';
 
+/**
+ * Full company universe: curated/featured companies (with stories & topics)
+ * plus the ~2,000-company real directory (US + Pakistan). Featured entries win
+ * on id collisions so their richer data is preserved.
+ */
+export const allCompanies: Company[] = (() => {
+  const seen = new Set(mockCompanies.map((c) => c.id));
+  return [...mockCompanies, ...directoryCompanies.filter((c) => !seen.has(c.id))];
+})();
+
 const usersById: Record<string, User> = Object.fromEntries(mockUsers.map((u) => [u.id, u]));
 const companiesById: Record<string, Company> = Object.fromEntries(
-  mockCompanies.map((c) => [c.id, c]),
+  allCompanies.map((c) => [c.id, c]),
 );
 const storiesById: Record<string, Story> = Object.fromEntries(mockStories.map((s) => [s.id, s]));
 

@@ -1,5 +1,5 @@
-import { useLocalSearchParams } from 'expo-router';
-import { Check, Flag, MoreHorizontal, Share2 } from 'lucide-react-native';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { Check, Flag, MoreHorizontal, PenLine, Share2 } from 'lucide-react-native';
 import { useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
@@ -29,6 +29,7 @@ const STORY_FILTERS = ['Most helpful', 'Newest', 'Current', 'Former'] as const;
 
 export default function CompanyDetailScreen() {
   const { colors } = useTheme();
+  const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const company = getCompanyById(id);
 
@@ -66,6 +67,14 @@ export default function CompanyDetailScreen() {
     );
   }
 
+  // Directory companies have no aggregated insights or stories yet.
+  const hasInsights =
+    company.topics.length > 0 || company.positives.length > 0 || company.challenges.length > 0;
+  const startStory = () => {
+    haptics.light();
+    router.push('/create/step-1');
+  };
+
   return (
     <Screen scroll edges={['top']} contentStyle={styles.content}>
       <AppHeader
@@ -93,10 +102,12 @@ export default function CompanyDetailScreen() {
           {company.name}
         </Text>
         <Text variant="body" color="textSecondary">
-          {company.industry}
+          {company.country ? `${company.industry} · ${company.country}` : company.industry}
         </Text>
         <Text variant="callout" color="accent" style={styles.count}>
-          {company.storyCount.toLocaleString()} workplace experiences
+          {company.storyCount > 0
+            ? `${company.storyCount.toLocaleString()} workplace experiences`
+            : 'No stories yet — be the first'}
         </Text>
         <Button
           label={following ? 'Following' : 'Follow'}
@@ -112,43 +123,53 @@ export default function CompanyDetailScreen() {
       <SegmentTabs tabs={TABS} value={tab} onChange={setTab} />
 
       {tab === 'Overview' ? (
-        <View style={styles.section}>
-          <SectionHeader title="What people talk about most" subtitle="Frequently mentioned — not a rating." />
-          <View style={styles.topics}>
-            {company.topics.map((topic, i) => (
-              <TopicBar key={topic.label} label={topic.label} percent={topic.percent} index={i} />
-            ))}
-          </View>
-
-          <View style={styles.twoCol}>
-            <View style={styles.col}>
-              <Text variant="subtitle">Common green flags</Text>
-              {company.positives.map((p) => (
-                <Point key={p} label={p} tone="success" />
+        !hasInsights ? (
+          <EmptyState
+            icon={PenLine}
+            title="No stories about this company yet"
+            message="Worked here or interviewed? Share what it was actually like — under your real professional profile."
+            actionLabel="Share your experience"
+            onAction={startStory}
+          />
+        ) : (
+          <View style={styles.section}>
+            <SectionHeader title="What people talk about most" subtitle="Frequently mentioned — not a rating." />
+            <View style={styles.topics}>
+              {company.topics.map((topic, i) => (
+                <TopicBar key={topic.label} label={topic.label} percent={topic.percent} index={i} />
               ))}
             </View>
-            <View style={styles.col}>
-              <Text variant="subtitle">Common red flags</Text>
-              {company.challenges.map((c) => (
-                <Point key={c} label={c} tone="danger" />
+
+            <View style={styles.twoCol}>
+              <View style={styles.col}>
+                <Text variant="subtitle">Common green flags</Text>
+                {company.positives.map((p) => (
+                  <Point key={p} label={p} tone="success" />
+                ))}
+              </View>
+              <View style={styles.col}>
+                <Text variant="subtitle">Common red flags</Text>
+                {company.challenges.map((c) => (
+                  <Point key={c} label={c} tone="danger" />
+                ))}
+              </View>
+            </View>
+
+            <SectionHeader title="Recent stories" actionLabel="See all" onActionPress={() => setTab('Stories')} />
+            <View style={styles.stack}>
+              {recentStories.map((s) => (
+                <StoryCard key={s.id} story={s} />
+              ))}
+            </View>
+
+            <SectionHeader title="People who've worked here" actionLabel="See all" onActionPress={() => setTab('People')} />
+            <View style={styles.stack}>
+              {people.slice(0, 3).map((u) => (
+                <PersonCard key={u.id} user={u} contextLine={u.headline} />
               ))}
             </View>
           </View>
-
-          <SectionHeader title="Recent stories" actionLabel="See all" onActionPress={() => setTab('Stories')} />
-          <View style={styles.stack}>
-            {recentStories.map((s) => (
-              <StoryCard key={s.id} story={s} />
-            ))}
-          </View>
-
-          <SectionHeader title="People who've worked here" actionLabel="See all" onActionPress={() => setTab('People')} />
-          <View style={styles.stack}>
-            {people.slice(0, 3).map((u) => (
-              <PersonCard key={u.id} user={u} contextLine={u.headline} />
-            ))}
-          </View>
-        </View>
+        )
       ) : null}
 
       {tab === 'Stories' ? (
@@ -186,6 +207,9 @@ export default function CompanyDetailScreen() {
 
       {tab === 'Roles' ? (
         <View style={styles.section}>
+          {company.roleCategories.length === 0 ? (
+            <EmptyState title="No roles yet" message="Roles appear once people share stories from this company." />
+          ) : null}
           <View style={styles.stack}>
             {company.roleCategories.map((r) => (
               <View

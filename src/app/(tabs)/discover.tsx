@@ -14,7 +14,7 @@ import { SearchField } from '@/components/ui/SearchField';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { Text } from '@/components/ui/Text';
 import { spacing } from '@/constants/spacing';
-import { mockCompanies, mockStories, mockUsers } from '@/data';
+import { directoryCompanies, mockCompanies, mockStories, mockUsers } from '@/data';
 import { INDUSTRIES } from '@/lib/search';
 import { useStore } from '@/store';
 
@@ -23,6 +23,9 @@ const EMPLOYMENT_FILTERS: EmploymentFilter[] = ['All', 'Current', 'Former'];
 const LOCATIONS = ['Remote', 'Hybrid', 'On-site'];
 const ROLES = ['Engineering', 'Product', 'Marketing', 'Sales', 'Operations'];
 const SIZES = ['Startup', 'Mid-size', 'Enterprise'];
+
+type CountryFilter = 'All' | 'United States' | 'Pakistan';
+const COUNTRY_FILTERS: CountryFilter[] = ['All', 'United States', 'Pakistan'];
 
 export default function DiscoverScreen() {
   const router = useRouter();
@@ -58,6 +61,13 @@ export default function DiscoverScreen() {
   const peopleToFollow = useMemo(() => mockUsers.filter((u) => u.id !== profile.id).slice(0, 3), [profile.id]);
   const discussed = useMemo(() => [...mockCompanies].slice(4, 8), []);
 
+  const [country, setCountry] = useState<CountryFilter>('All');
+  const browseCompanies = useMemo(() => {
+    const list =
+      country === 'All' ? directoryCompanies : directoryCompanies.filter((c) => c.country === country);
+    return list.slice(0, 8);
+  }, [country]);
+
   const resetFilters = () => {
     setIndustry(null);
     setEmployment('All');
@@ -89,6 +99,25 @@ export default function DiscoverScreen() {
           <SectionHeader title="Companies people are exploring" />
           <View style={styles.stack}>
             {exploringCompanies.map((c) => (
+              <CompanyCard key={c.id} company={c} showFollow />
+            ))}
+          </View>
+        </View>
+
+        <View style={styles.section}>
+          <SectionHeader
+            title="Browse companies"
+            subtitle={`${directoryCompanies.length.toLocaleString()} real companies · US & Pakistan`}
+            actionLabel="Search all"
+            onActionPress={() => router.push('/search')}
+          />
+          <View style={styles.wrapRow}>
+            {COUNTRY_FILTERS.map((c) => (
+              <Chip key={c} label={c} tone="forest" selected={country === c} onPress={() => setCountry(c)} />
+            ))}
+          </View>
+          <View style={styles.stack}>
+            {browseCompanies.map((c) => (
               <CompanyCard key={c.id} company={c} showFollow />
             ))}
           </View>

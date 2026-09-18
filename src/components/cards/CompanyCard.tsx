@@ -49,10 +49,10 @@ export function CompanyCard({ company, onPress, showFollow = false }: CompanyCar
             {company.name}
           </Text>
           <Text variant="small" color="textSecondary" numberOfLines={1}>
-            {company.industry}
+            {company.country ? `${company.industry} · ${company.country}` : company.industry}
           </Text>
           <Text variant="small" color="textMuted" numberOfLines={1}>
-            {formatCount(company.storyCount)} stories
+            {company.storyCount > 0 ? `${formatCount(company.storyCount)} stories` : 'No stories yet'}
           </Text>
         </View>
         {showFollow ? (

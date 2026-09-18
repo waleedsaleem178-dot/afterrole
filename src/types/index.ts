@@ -55,6 +55,8 @@ export interface Company {
   name: string;
   /** e.g. "Technology · Entertainment". */
   industry: string;
+  /** Headquarters country, e.g. "United States" or "Pakistan". */
+  country?: string;
   sizeLabel: string;
   logoColor: string;
   description: string;

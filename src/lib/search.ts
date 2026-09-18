@@ -1,4 +1,4 @@
-import { mockCompanies, mockStories, mockUsers } from '@/data';
+import { allCompanies, mockCompanies, mockStories, mockUsers } from '@/data';
 import type { Company, Story, User } from '@/types';
 
 export type SearchResult =
@@ -7,17 +7,29 @@ export type SearchResult =
   | { key: string; type: 'story'; story: Story }
   | { key: string; type: 'role'; role: string; companyId: string };
 
+/** Cap company matches so a broad query can't render thousands of rows. */
+const MAX_COMPANY_RESULTS = 40;
+
 export function searchAll(rawQuery: string): SearchResult[] {
   const q = rawQuery.trim().toLowerCase();
   if (!q) return [];
 
   const results: SearchResult[] = [];
 
-  for (const company of mockCompanies) {
-    if (`${company.name} ${company.industry}`.toLowerCase().includes(q)) {
-      results.push({ key: `c:${company.id}`, type: 'company', company });
+  // Companies: search the full real directory (US + Pakistan), capped.
+  // Prefix (name-starts-with) matches rank above substring matches.
+  const prefix: SearchResult[] = [];
+  const contains: SearchResult[] = [];
+  for (const company of allCompanies) {
+    const name = company.name.toLowerCase();
+    if (name.startsWith(q)) {
+      prefix.push({ key: `c:${company.id}`, type: 'company', company });
+    } else if (`${name} ${company.industry} ${company.country ?? ''}`.toLowerCase().includes(q)) {
+      contains.push({ key: `c:${company.id}`, type: 'company', company });
     }
+    if (prefix.length >= MAX_COMPANY_RESULTS) break;
   }
+  results.push(...[...prefix, ...contains].slice(0, MAX_COMPANY_RESULTS));
 
   for (const user of mockUsers) {
     const hay = `${user.name} ${user.headline} ${user.employment
