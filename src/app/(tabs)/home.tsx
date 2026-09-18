@@ -71,7 +71,7 @@ export default function HomeScreen() {
     <Screen scroll edges={['top']} contentStyle={styles.content}>
       {/* Header */}
       <View style={styles.header}>
-        <AfterRoleLogo size={19} withMark />
+        <AfterRoleLogo size={26} withMark />
         <View style={styles.headerRight}>
           <View>
             <IconButton icon={Bell} accessibilityLabel="Activity" variant="surface" onPress={() => router.push('/activity')} />

@@ -61,7 +61,7 @@ export function Chip({ label, selected, onPress, icon: Icon, size = 'md', tone =
       <Text
         style={{
           color: fg,
-          fontFamily: selected ? fontFamily.semibold : fontFamily.medium,
+          fontWeight: selected ? fontFamily.semibold : fontFamily.medium,
           fontSize: size === 'sm' ? 12.5 : 13.5,
         }}>
         {label}

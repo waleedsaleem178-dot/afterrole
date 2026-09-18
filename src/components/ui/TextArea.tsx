@@ -55,7 +55,7 @@ export function TextArea({
             color: colors.textPrimary,
             backgroundColor: colors.surface,
             borderColor: focused ? colors.accent : colors.border,
-            fontFamily: fontFamily.regular,
+            fontWeight: fontFamily.regular,
           },
           style,
         ]}

@@ -95,7 +95,7 @@ export function SearchField({
         style={[
           styles.flex,
           typography.body,
-          { color: colors.textPrimary, fontFamily: fontFamily.regular, paddingVertical: 0 },
+          { color: colors.textPrimary, fontWeight: fontFamily.regular, paddingVertical: 0 },
         ]}
       />
       {value && value.length > 0 ? (

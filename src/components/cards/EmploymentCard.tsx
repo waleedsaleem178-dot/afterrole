@@ -25,7 +25,7 @@ export function EmploymentCard({ employment, onVerify, onPress }: EmploymentCard
     <Card padded onPress={onPress}>
       <View style={styles.row}>
         <View style={[styles.logo, { backgroundColor: colors.accentSubtle }]}>
-          <Text style={{ color: colors.accent, fontFamily: fontFamily.bold, fontSize: 18 }}>
+          <Text style={{ color: colors.accent, fontWeight: fontFamily.bold, fontSize: 18 }}>
             {employment.companyName.charAt(0)}
           </Text>
         </View>

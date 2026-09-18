@@ -26,7 +26,7 @@ export function CompanyLogo({ company, size = 48 }: { company: Company; size?: n
         styles.logo,
         { width: size, height: size, borderRadius: radius.md, backgroundColor: company.logoColor },
       ]}>
-      <Text style={{ color: '#FFFFFF', fontFamily: fontFamily.bold, fontSize: size * 0.42 }}>
+      <Text style={{ color: '#FFFFFF', fontWeight: fontFamily.bold, fontSize: size * 0.42 }}>
         {company.name.charAt(0)}
       </Text>
     </View>

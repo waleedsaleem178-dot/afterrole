@@ -32,7 +32,7 @@ export default function SignInScreen() {
       <AppHeader showBack />
       <View style={styles.body}>
         <View style={styles.intro}>
-          <AfterRoleLogo size={26} withMark />
+          <AfterRoleLogo size={32} withMark />
           <Text variant="title" style={styles.title}>
             Welcome to afterrole.
           </Text>
@@ -104,7 +104,7 @@ function AuthButton({
         pressed && styles.pressed,
       ]}>
       <Icon size={20} color={fg} strokeWidth={2} />
-      <Text style={{ color: fg, fontFamily: fontFamily.semibold, fontSize: 16, letterSpacing: -0.1 }}>
+      <Text style={{ color: fg, fontWeight: fontFamily.semibold, fontSize: 16, letterSpacing: -0.1 }}>
         {label}
       </Text>
     </Pressable>

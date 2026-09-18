@@ -63,7 +63,7 @@ export default function OnboardingIdentity() {
 
           <View style={styles.employment}>
             <View style={[styles.logo, { backgroundColor: colors.accentSubtle }]}>
-              <Text style={{ color: colors.accent, fontFamily: fontFamily.bold, fontSize: 18 }}>A</Text>
+              <Text style={{ color: colors.accent, fontWeight: fontFamily.bold, fontSize: 18 }}>A</Text>
             </View>
             <View style={styles.employmentText}>
               <Text variant="callout">AdVital</Text>

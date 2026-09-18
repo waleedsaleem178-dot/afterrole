@@ -250,7 +250,7 @@ function CommentRow({ comment, onReply }: { comment: Comment; onReply: () => voi
             </Text>
           </Pressable>
           <Pressable hitSlop={6} onPress={onReply}>
-            <Text variant="small" color="textMuted" style={{ fontFamily: fontFamily.medium }}>
+            <Text variant="small" color="textMuted" style={{ fontWeight: fontFamily.medium }}>
               Reply
             </Text>
           </Pressable>
@@ -259,7 +259,7 @@ function CommentRow({ comment, onReply }: { comment: Comment; onReply: () => voi
             onPress={() =>
               router.push({ pathname: '/report/[storyId]', params: { storyId: comment.storyId } })
             }>
-            <Text variant="small" color="textMuted" style={{ fontFamily: fontFamily.medium }}>
+            <Text variant="small" color="textMuted" style={{ fontWeight: fontFamily.medium }}>
               Report
             </Text>
           </Pressable>
@@ -280,7 +280,7 @@ const styles = StyleSheet.create({
     padding: spacing.lg,
     gap: spacing.xs,
   },
-  quoteText: { fontFamily: fontFamily.medium, fontSize: 17, lineHeight: 26 },
+  quoteText: { fontWeight: fontFamily.medium, fontSize: 17, lineHeight: 26 },
   body: { lineHeight: 26 },
   goodText: { marginTop: spacing.xs },
   meta: { gap: spacing.md },

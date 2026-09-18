@@ -99,7 +99,7 @@ export function Button({
           <Text
             style={{
               color: fg[variant],
-              fontFamily: fontFamily.semibold,
+              fontWeight: fontFamily.semibold,
               fontSize: size === 'sm' ? 14 : 16,
               letterSpacing: -0.1,
             }}>

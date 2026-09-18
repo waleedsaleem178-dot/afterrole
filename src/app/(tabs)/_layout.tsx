@@ -48,7 +48,7 @@ export default function TabsLayout() {
           height: Platform.OS === 'ios' ? 88 : 66,
           paddingTop: 8,
         },
-        tabBarLabelStyle: { fontFamily: fontFamily.medium, fontSize: 11, letterSpacing: 0 },
+        tabBarLabelStyle: { fontWeight: fontFamily.medium, fontSize: 11, letterSpacing: 0 },
       }}>
       <Tabs.Screen
         name="home"

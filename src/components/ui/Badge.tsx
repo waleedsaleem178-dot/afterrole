@@ -27,7 +27,7 @@ export function Badge({ label, tone = 'neutral' }: BadgeProps) {
 
   return (
     <View style={[styles.badge, { backgroundColor: map.bg }]}>
-      <Text style={{ color: map.fg, fontFamily: fontFamily.semibold, fontSize: 11 }}>{label}</Text>
+      <Text style={{ color: map.fg, fontWeight: fontFamily.semibold, fontSize: 11 }}>{label}</Text>
     </View>
   );
 }
@@ -44,7 +44,7 @@ export function VerifiedBadge({ label, size = 14 }: VerifiedBadgeProps) {
     <View style={styles.row}>
       <BadgeCheck size={size} color={colors.verified} strokeWidth={2.4} />
       {label ? (
-        <Text style={{ color: colors.verified, fontFamily: fontFamily.medium, fontSize: 12 }}>
+        <Text style={{ color: colors.verified, fontWeight: fontFamily.medium, fontSize: 12 }}>
           {label}
         </Text>
       ) : null}

@@ -24,7 +24,7 @@ export default function WelcomeScreen() {
     <Screen edges={['top', 'bottom']}>
       <View style={styles.content}>
         <View style={styles.top}>
-          <AfterRoleLogo size={22} withMark />
+          <AfterRoleLogo size={40} withMark />
         </View>
 
         <View style={styles.hero}>

@@ -240,7 +240,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   bannerTint: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, opacity: 0.14 },
-  bannerInitial: { fontFamily: fontFamily.bold, fontSize: 96, opacity: 0.24 },
+  bannerInitial: { fontWeight: fontFamily.bold, fontSize: 96, opacity: 0.24 },
   identity: { alignItems: 'center', gap: spacing.xs, marginTop: -42 },
   logoRing: { padding: 4, borderRadius: radius.lg },
   name: { marginTop: spacing.sm },

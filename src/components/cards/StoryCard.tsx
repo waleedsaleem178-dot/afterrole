@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
   headerText: { flex: 1, gap: 1 },
   nameRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
   menu: { paddingLeft: spacing.xs, paddingTop: 2 },
-  finalStraw: { marginTop: spacing.md, fontFamily: fontFamily.medium, fontSize: 16, lineHeight: 24 },
+  finalStraw: { marginTop: spacing.md, fontWeight: fontFamily.medium, fontSize: 16, lineHeight: 24 },
   excerpt: { marginTop: spacing.md },
   topics: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.xs, marginTop: spacing.md },
   reactions: {

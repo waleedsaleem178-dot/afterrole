@@ -106,7 +106,7 @@ function Action({ icon: Icon, label, active, activeColor, filled, onPress, acces
       style={({ pressed }) => [styles.action, pressed && styles.pressed]}>
       <Icon size={19} color={color} strokeWidth={2} fill={filled ? color : 'transparent'} />
       {label ? (
-        <Text style={{ color, fontFamily: fontFamily.medium, fontSize: 13 }}>{label}</Text>
+        <Text style={{ color, fontWeight: fontFamily.medium, fontSize: 13 }}>{label}</Text>
       ) : null}
     </Pressable>
   );

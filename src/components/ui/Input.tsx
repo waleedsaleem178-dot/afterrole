@@ -44,7 +44,7 @@ export function Input({ label, hint, containerStyle, style, ...rest }: InputProp
             color: colors.textPrimary,
             backgroundColor: colors.surface,
             borderColor: focused ? colors.accent : colors.border,
-            fontFamily: fontFamily.regular,
+            fontWeight: fontFamily.regular,
           },
           style,
         ]}

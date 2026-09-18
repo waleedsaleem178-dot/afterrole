@@ -42,7 +42,7 @@ export function Avatar({
             styles.circle,
             { width: size, height: size, borderRadius: size / 2, backgroundColor: color },
           ]}>
-          <Text style={{ color: '#FFFFFF', fontFamily: fontFamily.semibold, fontSize: size * 0.38 }}>
+          <Text style={{ color: '#FFFFFF', fontWeight: fontFamily.semibold, fontSize: size * 0.38 }}>
             {initials(name)}
           </Text>
         </View>
