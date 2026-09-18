@@ -34,5 +34,5 @@ export function AfterRoleLogo({ size = 22, withMark = false, monoColor }: AfterR
 
 const styles = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  word: { fontFamily: fontFamily.bold, letterSpacing: -0.6, includeFontPadding: false },
+  word: { fontFamily: fontFamily.serif, letterSpacing: -0.3, includeFontPadding: false },
 });

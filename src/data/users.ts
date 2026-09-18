@@ -12,10 +12,10 @@ export const mockUsers: User[] = [
     location: 'Islamabad, Pakistan',
     bio: 'I build CRM, automation and AI systems that make teams work better.',
     avatarColor: '#3D725E',
-    verified: true,
-    followerCount: 1200,
-    followingCount: 486,
-    storyCount: 12,
+    verified: false,
+    followerCount: 0,
+    followingCount: 0,
+    storyCount: 0,
     employment: [
       {
         id: 'e_waleed_1',
@@ -25,7 +25,7 @@ export const mockUsers: User[] = [
         startLabel: 'Aug 2026',
         endLabel: 'Present',
         current: true,
-        verified: true,
+        verified: false,
       },
       {
         id: 'e_waleed_2',
@@ -35,7 +35,7 @@ export const mockUsers: User[] = [
         startLabel: '2024',
         endLabel: '2026',
         current: false,
-        verified: true,
+        verified: false,
       },
     ],
   },

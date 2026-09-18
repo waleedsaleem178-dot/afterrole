@@ -13,6 +13,9 @@ export const fontFamily = {
   medium: 'Inter_500Medium',
   semibold: 'Inter_600SemiBold',
   bold: 'Inter_700Bold',
+  /** Fraunces — warm editorial serif for headlines, wordmark and pull-quotes. */
+  serif: 'Fraunces_700Bold',
+  serifMedium: 'Fraunces_600SemiBold',
   mono:
     Platform.select({
       ios: 'ui-monospace',
@@ -37,8 +40,8 @@ export type TypographyVariant =
   | 'overline';
 
 export const typography: Record<TypographyVariant, TextStyle> = {
-  display: { fontFamily: fontFamily.bold, fontSize: 36, lineHeight: 42, letterSpacing: -0.4 },
-  title: { fontFamily: fontFamily.bold, fontSize: 28, lineHeight: 34, letterSpacing: -0.3 },
+  display: { fontFamily: fontFamily.serif, fontSize: 37, lineHeight: 42, letterSpacing: -0.2 },
+  title: { fontFamily: fontFamily.serif, fontSize: 29, lineHeight: 35, letterSpacing: -0.2 },
   heading: { fontFamily: fontFamily.semibold, fontSize: 21, lineHeight: 27, letterSpacing: -0.2 },
   subtitle: { fontFamily: fontFamily.semibold, fontSize: 18, lineHeight: 24, letterSpacing: -0.1 },
   bodyLarge: { fontFamily: fontFamily.regular, fontSize: 16, lineHeight: 25 },

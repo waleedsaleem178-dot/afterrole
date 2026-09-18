@@ -280,7 +280,7 @@ const styles = StyleSheet.create({
     padding: spacing.lg,
     gap: spacing.xs,
   },
-  quoteText: { fontStyle: 'italic' },
+  quoteText: { fontFamily: fontFamily.serifMedium, fontSize: 20, lineHeight: 28 },
   body: { lineHeight: 26 },
   goodText: { marginTop: spacing.xs },
   meta: { gap: spacing.md },

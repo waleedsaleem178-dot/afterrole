@@ -3,6 +3,7 @@ import { MoreHorizontal } from 'lucide-react-native';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { spacing } from '@/constants/spacing';
+import { fontFamily } from '@/constants/typography';
 import { getCompanyById, getUserById } from '@/data';
 import { useTheme } from '@/hooks/use-theme';
 import { relativeTime } from '@/lib/format';
@@ -93,7 +94,7 @@ const styles = StyleSheet.create({
   headerText: { flex: 1, gap: 1 },
   nameRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
   menu: { paddingLeft: spacing.xs, paddingTop: 2 },
-  finalStraw: { marginTop: spacing.md, fontStyle: 'italic', lineHeight: 26 },
+  finalStraw: { marginTop: spacing.md, fontFamily: fontFamily.serifMedium, fontSize: 18, lineHeight: 26 },
   excerpt: { marginTop: spacing.md },
   topics: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.xs, marginTop: spacing.md },
   reactions: {
